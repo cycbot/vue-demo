@@ -34,7 +34,7 @@
       </table>
     </div>
     <div class="info" v-if="selectItems.length != 0">
-      <p>已选择: <span>{{selectItems | checkedGroups}}</span></p>
+      <p>已选择{{selectItems.length}}项: <span>{{selectItems | checkedGroups}}</span></p>
     </div>
   </div>
 </template>
@@ -67,6 +67,7 @@ export default {
     },
     search () {
       this.items = []
+      this.selectItems = []
       if(this.inputCity == '' && this.inputName != '') {
         this.data.forEach(item => {
           if (item.name == this.inputName) {
@@ -101,7 +102,7 @@ export default {
         return this.list
       }
       this.list.forEach(item => {
-        if (this.inputCity[0] === item[0]) {
+        if (this.inputCity === item) {
           this.consult.push(item)
         }
       })
