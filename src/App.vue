@@ -64,32 +64,20 @@ export default {
     showList () {
       setTimeout(() => {
         this.isShow = !this.isShow
-      }, 100)
+      }, 200)
     },
     search () {
       this.items = []
-      if (this.inputCity == '' && this.inputName == '') {
-        this.items = this.data
-      } else  if (this.inputCity == '' && this.inputName != '') {
-        this.data.forEach(item => {
-          if (item.name == this.inputName) {
-            this.items.push(item)
-          }
-        })
-      } else if (this.inputCity != '' && this.inputName == '') {
-        this.data.forEach(item => {
-          if (item.city == this.inputCity) {
-            this.items.push(item)
-          }
-        })
-      } else if (this.inputCity != '' && this.inputName != '') {
-        this.data.forEach(item => {
-          if (item.name == this.inputName && item.city == this.inputCity) {
-            this.items.push(item)
-          }
-        })
-      }
-
+      this.selectItems = []
+      this.data.forEach(item => {
+        if (item.city == this.inputCity && item.name == this.inputName) {
+          this.items.push(item)
+        } else if ((item.city == this.inputCity || item.name == this.inputName) && (!this.inputCity || !this.inputName)) {
+          this.items.push(item)
+        } else if (!this.inputName && !this.inputCity) {
+          this.items.push(item)
+        }
+      })
     }
   },
   filters: {
@@ -108,7 +96,7 @@ export default {
         return this.list
       }
       this.list.forEach(item => {
-        if (this.inputCity === item) {
+        if (this.inputCity[0] === item[0]) {
           this.consult.push(item)
         }
       })
@@ -122,6 +110,7 @@ export default {
             if (i == item)count++
           })
         })
+        if(this.items.length == 0)return false
         return (this.selectItems.length == this.items.length) || (count == this.items.length)
       },
       set (value) {
@@ -152,6 +141,7 @@ export default {
     fetch('/api').then(res => {
       res.json().then(obj => {
         this.data = obj.data.data
+        this.items = this.data
       })
     })
   }
