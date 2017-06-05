@@ -72,6 +72,12 @@
     "checked": false
   },
   {
+    "id": 13,
+    "name": "生蚝",
+    "city": "深圳",
+    "checked": false
+  },
+  {
     "id": 14,
     "name": "早茶",
     "city": "上海",
@@ -93,6 +99,12 @@
     "id": 17,
     "name": "牛杂",
     "city": "深圳",
+    "checked": false
+  },
+  {
+    "id": 18,
+    "name": "生蚝",
+    "city": "广州",
     "checked": false
   },
   {

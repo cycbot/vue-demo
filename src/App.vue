@@ -25,7 +25,7 @@
         </thead>
         <tbody>
           <tr v-for="item in items">
-            <th><input type="checkbox" :value="item.name" v-model="selectItems"></th>
+            <th><input type="checkbox" :value="item" v-model="selectItems"></th>
             <th class="id">{{item.id}}</th>
             <th class="name">{{item.name}}</th>
             <th class="city">{{item.city}}</th>
@@ -50,6 +50,7 @@ export default {
       inputName: '',
       inputCity: '',
       selectItems: [],
+      tempSelect: [],
       data: [],
       isShow: false,
       list: ['北京','上海','成都','广州','深圳'],
@@ -67,8 +68,9 @@ export default {
     },
     search () {
       this.items = []
-      this.selectItems = []
-      if(this.inputCity == '' && this.inputName != '') {
+      if (this.inputCity == '' && this.inputName == '') {
+        this.items = this.data
+      } else  if (this.inputCity == '' && this.inputName != '') {
         this.data.forEach(item => {
           if (item.name == this.inputName) {
             this.items.push(item)
@@ -92,7 +94,11 @@ export default {
   },
   filters: {
     checkedGroups (value) {
-      return value.join(',')
+      let res = []
+      value.forEach(item => {
+        res.push(item.name)
+      })
+      return res.join(' ')
     }
   },
   computed: {
@@ -110,15 +116,34 @@ export default {
     },
     selectAll: {
       get () {
-        return this.selectItems.length == this.items.length
+        let count = 0
+        this.items.forEach(item => {
+          this.selectItems.forEach(i => {
+            if (i == item)count++
+          })
+        })
+        return (this.selectItems.length == this.items.length) || (count == this.items.length)
       },
       set (value) {
         if (value) {
           this.items.forEach(item => {
-            this.selectItems.push(item.name)
+            let flag = true
+            for (let i of this.selectItems) {
+              if(i === item)flag = false
+            }
+            console.log(flag)
+            if (flag) {
+              this.selectItems.push(item)
+            }
           })
         } else {
-          this.selectItems = []
+          this.items.forEach(item => {
+            for (let i = 0; i < this.selectItems.length; i++) {
+              if (this.selectItems[i] == item) {
+                this.selectItems.splice(i,1)
+              }
+            }
+          })
         }
       }
     }
